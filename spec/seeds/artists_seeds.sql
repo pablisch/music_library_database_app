@@ -15,3 +15,8 @@ INSERT INTO artists ("name", "genre") VALUES
 ('Taylor Swift', 'Pop'),
 ('Nina Simone', 'Pop');
 
+-- psql -h 127.0.0.1 music_library_app < spec/seeds/albums_seeds.sql
+-- psql -h 127.0.0.1 music_library_app < spec/seeds/artists_seeds.sql
+
+-- psql -h 127.0.0.1 music_library_app_test < spec/seeds/albums_seeds.sql
+-- psql -h 127.0.0.1 music_library_app_test < spec/seeds/artists_seeds.sql
