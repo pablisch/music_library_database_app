@@ -21,7 +21,7 @@ describe Application do
 
   context "get all albums" do
     it "returns a list of all albums" do
-      response = get('/albums')
+      response = get('/all_albums')
 
       albums_list = "Doolittle, Surfer Rosa, Waterloo, Super Trouper, Bossanova, Lover, Folklore, I Put a Spell on You, Baltimore, Here Comes the Sun, Fodder on My Wings, Ring Ring"
 
@@ -32,22 +32,22 @@ describe Application do
 
   context "creates an album" do
     it "creates a new resource (album) and returns nothing #1" do
-      response = post('/albums', title: 'OK Computer', release_year: '1997', artist_id: '1')
+      response = post('/all_albums', title: 'OK Computer', release_year: '1997', artist_id: '1')
 
       expect(response.status).to eq 200
       expect(response.body).to eq ''
 
-      response = get('/albums')
+      response = get('/all_albums')
       expect(response.body).to include('OK Computer')
     end
 
     it "creates a new resource (album) and returns nothing #2" do
-      response = post('/albums', title: 'Voyage', release_year: '2022', artist_id: '2')
+      response = post('/all_albums', title: 'Voyage', release_year: '2022', artist_id: '2')
 
       expect(response.status).to eq 200
       expect(response.body).to eq ''
 
-      response = get('/albums')
+      response = get('/all_albums')
       expect(response.body).to include('Voyage')
     end
   end
@@ -58,5 +58,32 @@ describe Application do
     expect(response.body).to eq ""
     response = get('./artists')
     expect(response.body).to include 'Wild nothing'
+  end
+
+  context "returns HTML content displaying dteails for a single album" do
+    it "returns album 1 details from albums" do
+      response = get('/albums/1')
+      expect(response.body).to include '<h1>Doolittle</h1>'
+      expect(response.body).to include 
+      '<p>Release year: 1989 Astist: Pixies</p>'
+    end
+
+    it "returns album 1 details from albums" do
+      response = get('/albums/2')
+      expect(response.body).to include '<h1>Surfer Rosa</h1>'
+      expect(response.body).to include 
+      '<p>Release year: 1988 Artist: Pixies</p>'
+    end
+  end
+
+  context "returns HTML content displaying details for all albums" do
+    it "returns all albums as a list with detials" do
+      response = get('/albums')
+      expect(response.body).to include '<h1>Albums</h1>'
+      expect(response.body).to include 
+      '<p>Title: Doolittle Realease year: 1989</p>'
+      expect(response.body).to include 
+      '<p>Title: Surfer Rosa Realease year: 1988</p>'
+    end
   end
 end

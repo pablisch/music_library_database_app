@@ -14,13 +14,13 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
-  get '/albums' do
+  get '/all_albums' do # SELECT all albums
     repo = AlbumRepository.new
     albums = repo.all
     return albums.map(&:title).join(", ")
   end
 
-  post '/albums' do
+  post '/all_albums' do # CREATE album
     repo = AlbumRepository.new
     new_album = Album.new
     new_album.title = params[:title]
@@ -31,13 +31,33 @@ class Application < Sinatra::Base
     return ""
   end
 
-  get '/artists' do
+  get '/albums' do # returns an array object of all the album objects
+    repo = AlbumRepository.new
+    albums = repo.all
+    @album_info = albums.map{ |album| [album.title, album.release_year]}
+
+    return erb(:albums)
+  end
+
+  get '/albums/:id' do # returns webpage of a single album info
+    album_id = params[:id]
+    album_repo = AlbumRepository.new
+    artist_repo = ArtistRepository.new
+    album = album_repo.find(album_id)
+    artist = artist_repo.find(album.artist_id)
+    @title = album.title
+    @release_year = album.release_year
+    @artist = artist.name
+    return erb(:album)
+  end
+
+  get '/artists' do # Returns a list of artists names
     repo = ArtistRepository.new
     artists = repo.all
     artists.map(&:name).join(", ")
   end
 
-  post '/artists' do
+  post '/artists' do # Returns a list of album titles
     repo = ArtistRepository.new
     new_artist = Artist.new
     new_artist.name = params[:name]
@@ -45,4 +65,11 @@ class Application < Sinatra::Base
     repo.create(new_artist)
     return ""
   end
+
+  get '/test' do # Just testing erb for the first time!
+    @names = ['Pablo', 'Sabina', 'Gurutze']
+    @title = "Names list"
+    return erb(:test) 
+  end
+
 end
