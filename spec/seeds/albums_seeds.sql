@@ -30,3 +30,9 @@ INSERT INTO albums ("title", "release_year", "artist_id") VALUES
 
 -- psql -h 127.0.0.1 music_library_app_test < spec/seeds/albums_seeds.sql
 -- psql -h 127.0.0.1 music_library_app_test < spec/seeds/artists_seeds.sql
+
+-- psql -h 127.0.0.1 music_library < spec/seeds/albums_seeds.sql
+-- psql -h 127.0.0.1 music_library < spec/seeds/artists_seeds.sql
+
+-- psql -h 127.0.0.1 music_library_test < spec/seeds/albums_seeds.sql
+-- psql -h 127.0.0.1 music_library_test < spec/seeds/artists_seeds.sql

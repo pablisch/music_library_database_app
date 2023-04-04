@@ -16,7 +16,7 @@ You'll need to include:
 Query params: |  
 Body params:  |  
 --------------------------
-  Response:   |  List of all albums
+  Response:   |  List of all album titles
 
 ## 2. Design the Response
 
