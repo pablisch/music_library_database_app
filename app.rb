@@ -34,7 +34,7 @@ class Application < Sinatra::Base
   get '/albums' do # returns an array object of all the album objects
     repo = AlbumRepository.new
     albums = repo.all
-    @album_info = albums.map{ |album| [album.title, album.release_year]}
+    @album_info = albums.map{ |album| [album.title, album.release_year, album.id]}
 
     return erb(:albums)
   end
@@ -51,13 +51,26 @@ class Application < Sinatra::Base
     return erb(:album)
   end
 
-  get '/artists' do # Returns a list of artists names
+  get '/artists' do
+    repo = ArtistRepository.new
+    @artists = repo.all
+    return erb(:artists)
+  end 
+
+  get '/artists/:id' do
+    artist_id = params[:id]
+    repo = ArtistRepository.new
+    @artist = repo.find(artist_id)
+    return erb(:artist)
+  end
+
+  get '/all_artists' do # Returns a list of artists names
     repo = ArtistRepository.new
     artists = repo.all
     artists.map(&:name).join(", ")
   end
 
-  post '/artists' do # Returns a list of album titles
+  post '/all_artists' do # Returns a list of album titles
     repo = ArtistRepository.new
     new_artist = Artist.new
     new_artist.name = params[:name]
@@ -71,5 +84,27 @@ class Application < Sinatra::Base
     @title = "Names list"
     return erb(:test) 
   end
+
+  get "/album/new/form" do
+    return erb(:new_album_form)
+  end
+
+  post "/album/new" do
+    @artist = params[:artist]
+    @release_year = params[:release_year]
+    @title = params[:title]
+    album_repo = AlbumRepository.new
+    new_album = Album.new
+    artist_repo = ArtistRepository.new
+    artists = artist_repo.all
+    new_album.artist_id = 0
+    artists.each { |item| new_album.artist_id = item.id if @artist == item.name }
+    new_album.title = @title
+    new_album.release_year = @release_year.to_i
+    album_repo.create(new_album)
+    return erb(:new_album)
+  end
+
+
 
 end

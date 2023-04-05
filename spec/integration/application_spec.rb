@@ -2,8 +2,11 @@ require "spec_helper"
 require "rack/test"
 require_relative '../../app'
 
-def reset_albums_table
+def reset_tables
   seed_sql = File.read('spec/seeds/albums_seeds.sql')
+  connection = PG.connect({ host: '127.0.0.1', dbname: 'music_library_test' })
+  connection.exec(seed_sql)
+  seed_sql = File.read('spec/seeds/artists_seeds.sql')
   connection = PG.connect({ host: '127.0.0.1', dbname: 'music_library_test' })
   connection.exec(seed_sql)
 end
@@ -13,7 +16,7 @@ describe Application do
   include Rack::Test::Methods
 
   before(:each) do 
-    reset_albums_table
+    reset_tables
   end
   # We need to declare the `app` value by instantiating the Application
   # class so our tests work.
@@ -53,10 +56,10 @@ describe Application do
   end
 
   it "creates a new artist and returns nothing" do
-    response = post('/artists', name: 'Wild nothing', genre: 'Indie')
+    response = post('/all_artists', name: 'Wild nothing', genre: 'Indie')
     expect(response.status).to eq 200
     expect(response.body).to eq ""
-    response = get('./artists')
+    response = get('./all_artists')
     expect(response.body).to include 'Wild nothing'
   end
 
@@ -86,4 +89,47 @@ describe Application do
       '<p>Title: Surfer Rosa Realease year: 1988</p>'
     end
   end
+
+  it "returns all artist as a list with details" do
+    response = get('/artists')
+    expect(response.body).to include '<h1>Artists</h1>'
+    expect(response.body).to include 
+    'Artist name: Pixies'
+    expect(response.body).to include 
+    'Genre: Pop'
+    expect(response.body).to include 
+    'Genre: Rock'
+  end
+
+  it "returns a single artist with details" do
+    response = get('/artists/3')
+    expect(response.status).to eq 200
+    expect(response.body).to include '<h1>Taylor Swift</h1>'
+    expect(response.body).to include 'Genre: Pop'
+  end
+
+  it "returns a form for a new album to be created" do
+    response = get('album/new/form')
+    expect(response.status).to eq 200
+    expect(response.body).to include 'form method="POST"'
+    expect(response.body).to include "</form>"
+    expect(response.body).to include 'input type="text"'
+  end
+
+  context "recieves new album form and processes it" do
+    it "creates a new album and returns a confirmation page" do
+      response = post('album/new', title: 'First Take', artist: 'Roberta Flack', release_year: '1969')
+      expect(response.status).to eq 200
+      expect(response.body).to include "<h1>'First Take' has been added to the album database</h1>"
+    end
+
+    it "creates a new album and returns a confirmation page" do
+      response = post('album/new', title: 'Prophecy', artist: 'The Comet is Coming', release_year: '2015')
+      # expect(response.status).to eq 200
+      expect(response.body).to include "<h1>'Prophecy' has been added to the album database</h1>"
+    end
+  end
+
+
+
 end

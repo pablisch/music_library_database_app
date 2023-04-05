@@ -3,7 +3,7 @@
   <body>
     <h1>Albums</h1>
     <% @album_info.each do |album| %>
-    <div>Title: <%= album[0] %> Release year: <%= album[1] %></div>
+    <div>Title: <a href="./albums/<%= album[2] %>"><%= album[0] %></a> ... Release year: <%= album[1] %></div>
     <% end %>
   </body>
 </html>
