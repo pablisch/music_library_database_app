@@ -109,6 +109,10 @@ class Application < Sinatra::Base
   end
 
   post '/artists/new' do
+    if invalid_artist_parameters?()
+      status 400
+      return ''
+    end
     @name, @genre = params[:name], params[:genre]
     new_artist = Artist.new
     new_artist.name, new_artist.genre = @name, @genre
@@ -133,6 +137,12 @@ class Application < Sinatra::Base
   def  invalid_album_parameters?
     return true if params[:title] == nil || params[:release_year] == nil || params[:artist] == nil
     return true if params[:title] == '' || params[:release_year] == '' || params[:artist] == ''
+    return false
+  end
+
+  def  invalid_artist_parameters?
+    return true if params[:name] == nil || params[:genre] == nil
+    return true if params[:name] == '' || params[:genre] == ''
     return false
   end
 

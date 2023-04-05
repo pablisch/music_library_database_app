@@ -160,8 +160,24 @@ describe Application do
       expect(artist.name).to eq 'The Comet is Coming'
       expect(artist.genre).to eq 'Modern Jazz'
     end
+
+    it "creates a new artist and returns a confirmation page" do
+      response = post('artists/new', name: 'Derrick Harriot', genre: 'Reggae')
+      expect(response.status).to eq 200
+      expect(response.body).to include '<h2>Derrick Harriot has been added to the Artist database.</h2>'
+      artist = ArtistRepository.new.find(5)
+      expect(artist.name).to eq 'Derrick Harriot'
+      expect(artist.genre).to eq 'Reggae'
+    end
+
+    it "returns a 400 status when a nil value is passed" do
+      response = post('artists/new', name: 'Derrick Harriot')
+      expect(response.status).to eq 400
+    end
+
+    it "returns a 400 status when an empty value is passed" do
+      response = post('artists/new', name: 'Derrick Harriot', genre: '')
+      expect(response.status).to eq 400
+    end
   end 
-
-
-
 end
