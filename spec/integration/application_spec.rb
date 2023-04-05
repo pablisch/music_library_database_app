@@ -121,6 +121,9 @@ describe Application do
       response = post('albums/new', title: 'First Take', artist: 'Roberta Flack', release_year: '1969')
       expect(response.status).to eq 200
       expect(response.body).to include "<h2>'First Take' has been added to the album database</h2>"
+      album = AlbumRepository.new.find(13)
+      expect(album.title).to eq 'First Take'
+      expect(album.release_year).to eq '1969'
     end
 
     it "creates a new album and returns a confirmation page" do
@@ -153,8 +156,7 @@ describe Application do
       response = post('artists/new', name: 'The Comet is Coming', genre: 'Modern Jazz')
       expect(response.status).to eq 200
       expect(response.body).to include '<h2>The Comet is Coming has been added to the Artist database.</h2>'
-      repo = ArtistRepository.new
-      artist = repo.find(5)
+      artist = ArtistRepository.new.find(5)
       expect(artist.name).to eq 'The Comet is Coming'
       expect(artist.genre).to eq 'Modern Jazz'
     end
