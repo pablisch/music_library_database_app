@@ -6,7 +6,7 @@ require 'pg'
 # PG library. We'll use it in our project to interact
 # with the database using SQL.
 
-class DatabaseConnection
+# class DatabaseConnection
 
   # The code below is from https://github.com/makersacademy/web-applications/blob/main/html_challenges/07_deploying_render.md#using-a-postgresql-database-on-render
   # For deploying apps using Render
@@ -53,4 +53,4 @@ class DatabaseConnection
   #   end
   #   @connection.exec_params(query, params)
   # end
-end
+# end
