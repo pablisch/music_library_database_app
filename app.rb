@@ -112,8 +112,7 @@ class Application < Sinatra::Base
     @name, @genre = params[:name], params[:genre]
     new_artist = Artist.new
     new_artist.name, new_artist.genre = @name, @genre
-    repo = ArtistRepository.new
-    repo.create(new_artist)
+    ArtistRepository.new.create(new_artist)
     return erb(:new_artist)
   end
 
