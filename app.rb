@@ -39,6 +39,14 @@ class Application < Sinatra::Base
     return erb(:albums)
   end
 
+  get '/albums/' do # returns an array object of all the album objects
+    repo = AlbumRepository.new
+    albums = repo.all
+    @album_info = albums.map{ |album| [album.title, album.release_year, album.id]}
+
+    return erb(:albums)
+  end
+
   get '/albums/:id' do # returns webpage of a single album info
     album_id = params[:id]
     album_repo = AlbumRepository.new
@@ -49,19 +57,6 @@ class Application < Sinatra::Base
     @release_year = album.release_year
     @artist = artist.name
     return erb(:album)
-  end
-
-  get '/artists' do
-    repo = ArtistRepository.new
-    @artists = repo.all
-    return erb(:artists)
-  end 
-
-  get '/artists/:id' do
-    artist_id = params[:id]
-    repo = ArtistRepository.new
-    @artist = repo.find(artist_id)
-    return erb(:artist)
   end
 
   get '/all_artists' do # Returns a list of artists names
@@ -85,11 +80,15 @@ class Application < Sinatra::Base
     return erb(:test) 
   end
 
-  get "/album/new/form" do
+  get "/albums/new/form" do
     return erb(:new_album_form)
   end
 
-  post "/album/new" do
+  post "/albums/new" do
+    if invalid_album_parameters?()
+      status 400
+      return ''
+    end
     @artist = params[:artist]
     @release_year = params[:release_year]
     @title = params[:title]
@@ -103,6 +102,39 @@ class Application < Sinatra::Base
     new_album.release_year = @release_year.to_i
     album_repo.create(new_album)
     return erb(:new_album)
+  end
+
+  get '/artists/new/form' do
+    return erb(:new_artist_form)
+  end
+
+  post '/artists/new' do
+    @name, @genre = params[:name], params[:genre]
+    new_artist = Artist.new
+    new_artist.name, new_artist.genre = @name, @genre
+    repo = ArtistRepository.new
+    repo.create(new_artist)
+    return erb(:new_artist)
+  end
+
+  get '/artists' do
+    repo = ArtistRepository.new
+    @artists = repo.all
+    return erb(:artists)
+  end 
+
+  get '/artists/:id' do
+    artist_id = params[:id]
+    repo = ArtistRepository.new
+    @artist = repo.find(artist_id)
+    return erb(:artist)
+  end
+
+
+  def  invalid_album_parameters?
+    return true if params[:title] == nil || params[:release_year] == nil || params[:artist] == nil
+    return true if params[:title] == '' || params[:release_year] == '' || params[:artist] == ''
+    return false
   end
 
 

@@ -109,26 +109,56 @@ describe Application do
   end
 
   it "returns a form for a new album to be created" do
-    response = get('album/new/form')
+    response = get('albums/new/form')
     expect(response.status).to eq 200
     expect(response.body).to include 'form method="POST"'
     expect(response.body).to include "</form>"
     expect(response.body).to include 'input type="text"'
   end
 
-  context "recieves new album form and processes it" do
+  context "POST /albums/new" do
     it "creates a new album and returns a confirmation page" do
-      response = post('album/new', title: 'First Take', artist: 'Roberta Flack', release_year: '1969')
+      response = post('albums/new', title: 'First Take', artist: 'Roberta Flack', release_year: '1969')
       expect(response.status).to eq 200
-      expect(response.body).to include "<h1>'First Take' has been added to the album database</h1>"
+      expect(response.body).to include "<h2>'First Take' has been added to the album database</h2>"
     end
 
     it "creates a new album and returns a confirmation page" do
-      response = post('album/new', title: 'Prophecy', artist: 'The Comet is Coming', release_year: '2015')
-      # expect(response.status).to eq 200
-      expect(response.body).to include "<h1>'Prophecy' has been added to the album database</h1>"
+      response = post('albums/new', title: 'Prophecy', artist: 'The Comet is Coming', release_year: '2015')
+      expect(response.status).to eq 200
+      expect(response.body).to include "<h2>'Prophecy' has been added to the album database</h2>"
+    end
+
+    it "returns nothing when a nil value is given" do
+      response = post('albums/new', title: 'Prophecy', artist: 'The Comet is Coming')
+      expect(response.status).to eq 400
+    end
+
+    it "returns nothing when an empty value is given" do
+      response = post('albums/new', title: '', artist: 'The Comet is Coming', release_year: '2015')
+      expect(response.status).to eq 400
     end
   end
+
+  context "GET artists/new/form" do
+    it "returns a new artist form" do
+      response = get('artists/new/form')
+      expect(response.status).to eq 200
+      expect(response.body).to include '<form method="POST" action="/artists/new"'
+    end
+  end
+
+  context "POST artists/new" do
+    it "creates a new artist and returns a confirmation page" do
+      response = post('artists/new', name: 'The Comet is Coming', genre: 'Modern Jazz')
+      expect(response.status).to eq 200
+      expect(response.body).to include '<h2>The Comet is Coming has been added to the Artist database.</h2>'
+      repo = ArtistRepository.new
+      artist = repo.find(5)
+      expect(artist.name).to eq 'The Comet is Coming'
+      expect(artist.genre).to eq 'Modern Jazz'
+    end
+  end 
 
 
 
