@@ -31,6 +31,10 @@ class Application < Sinatra::Base
     return ""
   end
 
+  get '/' do # returns an array object of all the album objects
+    return erb(:index)
+  end
+
   get '/albums' do # returns an array object of all the album objects
     repo = AlbumRepository.new
     albums = repo.all
