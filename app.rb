@@ -78,12 +78,6 @@ class Application < Sinatra::Base
     return ""
   end
 
-  get '/test' do # Just testing erb for the first time!
-    @names = ['Pablo', 'Sabina', 'Gurutze']
-    @title = "Names list"
-    return erb(:test) 
-  end
-
   get "/albums/new/form" do
     return erb(:new_album_form)
   end
