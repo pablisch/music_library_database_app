@@ -32,6 +32,10 @@ This is not a fully developed app, but is an exploration of the Sinatra framewor
 
 The homepage simply has a link to albums which is really the mainpage of the app and is where any link to HOME will take you.
 
+![The albums page](images/albums.png)  
+
 Each album has a link which will navigate to the album's page using :id. On this page you can see the album's most basic details.
+
+![The album page](images/album.png)
 
 
