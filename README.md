@@ -3,7 +3,7 @@
 ## Description
 
 This is a simple music library database app that allows users to navigate between a list of albums and the individual album pages. Yep, that's it. Nothing more to see here. 
-The app is built using Ruby, Sinatra, and PostgreSQL.
+The app is built using Ruby, Sinatra, and PostgreSQL and was the main project of the [Makers Ruby Web Applications module](https://github.com/makersacademy/web-applications/tree/main).
 
 ## Installation
 
@@ -37,5 +37,10 @@ The homepage simply has a link to albums which is really the mainpage of the app
 Each album has a link which will navigate to the album's page using :id. On this page you can see the album's most basic details.
 
 ![The album page](images/album.png)
+
+## Deploying the App
+
+This app was deployed on Render. It was the first app that I ever deployed on Render. The app is currently suspended as it is not very impressive and only a simgle free PostgreSQL database is allowed on Render.
+
 
 
