@@ -8,39 +8,39 @@ require 'pg'
 
 class DatabaseConnection
 
-  # # The code below is from https://github.com/makersacademy/web-applications/blob/main/html_challenges/07_deploying_render.md#using-a-postgresql-database-on-render
-  # # For deploying apps using Render
+  # The code below is from https://github.com/makersacademy/web-applications/blob/main/html_challenges/07_deploying_render.md#using-a-postgresql-database-on-render
+  # For deploying apps using Render
 
-  # def self.connect
-  #   # If the environment variable (set by Render)
-  #   # is present, use this to open the connection.
-  #   if ENV['DATABASE_URL'] != nil
-  #     @connection = PG.connect(ENV['DATABASE_URL'])
-  #     return
-  #   end
-  
-  #   if ENV['ENV'] == 'test'
-  #     database_name = 'music_library_test'
-  #   else
-  #     database_name = 'music_web_database'
-  #   end
-  #   @connection = PG.connect({ host: '127.0.0.1', dbname: database_name })
-  # end
-
-
-  ##### The code below is the original code pre-Render
-
-  # This method connects to PostgreSQL using the 
-  # PG gem. We connect to 127.0.0.1, and select
-  # the database name given in argument.
   def self.connect
+    # If the environment variable (set by Render)
+    # is present, use this to open the connection.
+    if ENV['DATABASE_URL'] != nil
+      @connection = PG.connect(ENV['DATABASE_URL'])
+      return
+    end
+  
     if ENV['ENV'] == 'test'
       database_name = 'music_library_test'
     else
-      database_name = 'music_library'
+      database_name = 'music_web_database'
     end
     @connection = PG.connect({ host: '127.0.0.1', dbname: database_name })
   end
+
+
+  ##### The code below is the original code pre-Render for a local DB connection
+
+  # # This method connects to PostgreSQL using the 
+  # # PG gem. We connect to 127.0.0.1, and select
+  # # the database name given in argument.
+  # def self.connect
+  #   if ENV['ENV'] == 'test'
+  #     database_name = 'music_library_test'
+  #   else
+  #     database_name = 'music_library'
+  #   end
+  #   @connection = PG.connect({ host: '127.0.0.1', dbname: database_name })
+  # end
 
   # This method executes an SQL query 
   # on the database, providing some optional parameters
